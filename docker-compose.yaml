@@ -1,8 +1,21 @@
 version: '3.8'
 
 services:
-  web:
-    build: .
-    command: /usr/bin/python3 weather_collector/manage.py runserver 0.0.0.0:80
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    command: gunicorn -b 0.0.0.0:8000 --workers=5 weather_collector.wsgi --chdir weather_collector/
+    env_file:
+      - ./env.list
+    expose:
+      - 8000
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
     ports:
       - 80:80
+    depends_on:
+      - backend
