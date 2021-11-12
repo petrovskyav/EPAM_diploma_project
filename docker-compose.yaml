@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: /usr/bin/python3 weather_collector/manage.py runserver 0.0.0.0:80
+    ports:
+      - 80:80
