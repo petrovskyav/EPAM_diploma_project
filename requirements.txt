@@ -2,3 +2,4 @@ django
 requests
 django-mathfilters
 gunicorn
+pymysql
