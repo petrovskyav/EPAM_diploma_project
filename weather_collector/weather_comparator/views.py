@@ -15,8 +15,18 @@ def weather(request, year, month, day):
         dt_date = dt_date - datetime.timedelta(days=1)
     year_ago_dt_date = dt_date - datetime.timedelta(days=365)
     m = Metaweather()
-    req_date_data = m.get_weather_history('St Petersburg', dt_date)
-    year_ago_date_data = m.get_weather_history('St Petersburg', year_ago_dt_date)
+
+    try:
+        req_date_data = m.get_weather_history('St Petersburg', dt_date)
+    except Exception as e:
+        return render(request, 'weather_comparator/error.html', {'title':'Error', 'exception_text':str(e)})
+
+    try:
+        year_ago_date_data = m.get_weather_history('St Petersburg', year_ago_dt_date)
+    except Exception as e:
+        return render(request, 'weather_comparator/error.html', {'title':'Error', 'exception_text':str(e)})
+
+
     title = f'Погода в Санкт-Петербурге за {dt_date.date().strftime("%d.%m.%Y")} и {year_ago_dt_date.date().strftime("%d.%m.%Y")}'
 
     diffs = {'min_temp': round(req_date_data['avg_data']['min_temp'] - year_ago_date_data['avg_data']['min_temp'], 3),

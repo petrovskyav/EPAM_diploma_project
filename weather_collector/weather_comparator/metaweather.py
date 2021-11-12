@@ -9,9 +9,6 @@ requests.packages.urllib3.disable_warnings()
 class Metaweather():
     def __init__(self):
         self.base_url = 'https://www.metaweather.com/api/'
-        self.db_host = '127.0.0.1'
-        self.db_login = 'db_login'
-        self.db_password = 'db_password'
 
     def api_query(self, sub_url):
         url = self.base_url + sub_url
