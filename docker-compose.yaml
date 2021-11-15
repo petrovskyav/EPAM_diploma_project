@@ -3,18 +3,18 @@ version: '3.8'
 services:
   backend:
     build:
-      context: .
-      dockerfile: Dockerfile.backend
+      context: ./backend/
+      dockerfile: Dockerfile
     command: gunicorn -b 0.0.0.0:8000 --workers=5 weather_collector.wsgi --chdir weather_collector/
     env_file:
-      - ./env.list
+      - backend/env.list
     expose:
       - 8000
 
   frontend:
     build:
-      context: .
-      dockerfile: Dockerfile.frontend
+      context: ./frontend/
+      dockerfile: Dockerfile
     ports:
       - 80:80
     depends_on:

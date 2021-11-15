@@ -1,0 +1,45 @@
+{% extends 'weather_comparator/base.html' %}
+
+{% block content %}
+<div class="container-md">
+    <div class='row'>
+        <div class='col-xl-4'>
+            <table>
+                <tr>
+                    <td nowrap>Choose the date</td>
+                    <td><input id="inputDate" type="date" class="form-control" max="{% now "Y-m-d" %}" style="margin:5px;"></td>
+                    <td><button id="getDate" class="btn btn-outline-success" style="margin:5px;">Go to date</button></td>
+                </tr>
+            </table>
+
+            <div style="margin:5px;">
+                <button id="goto_yesterday" class="btn btn-outline-info">Yesterday</button>
+            </div>
+
+            <div style="margin:5px;">
+                <a class="btn btn-outline-danger" href="erase_db" role="button">Delete all</a>
+            </div>
+        </div>
+    </div>
+    <div class='row'>
+    <div class='col-xl-6'>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in distinct_days %}
+        <tr>
+            <td><a href="/{{ i|date:'Y' }}/{{ i|date:'m' }}/{{ i|date:'d' }}"> {{ i|date:'d.m.Y' }} </a></td>
+            <td><a href="/delete/{{ i|date:'Y' }}/{{ i|date:'m' }}/{{ i|date:'d' }}">Delete</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    </div>
+</div>
+{% endblock %}

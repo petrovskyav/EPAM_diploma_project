@@ -1,0 +1,143 @@
+{% extends 'weather_comparator/base.html' %}
+{% load mathfilters %}
+
+{% block content %}
+<div class="container-md">
+    <div class='row'>
+        <div class='col-xl-6'>
+            <h3 class='text-center'> {{ date | date:'d.m.Y' }}</h3>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Min temp</th>
+                    <th scope="col">Max temp</th>
+                    <th scope="col">The temp</th>
+                    <th scope="col">Humidity</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in req_date_data.data %}
+                <tr>
+                    <td>{{ i.datetime|date:'d.m.Y H:i' }}</td>
+                    <td>{{ i.min_temp }} °C</td>
+                    <td>{{ i.max_temp }} °C</td>
+                    <td>{{ i.the_temp }} °C</td>
+                    <td>{{ i.humidity }} %</td>
+                </tr>
+                {% endfor %}
+                <tr style="font-weight:bold">
+                    <td> Average</td>
+                    <td>{{ req_date_data.avg_data.min_temp }} °C</td>
+                    <td>{{ req_date_data.avg_data.max_temp }} °C</td>
+                    <td>{{ req_date_data.avg_data.the_temp }} °C</td>
+                    <td>{{ req_date_data.avg_data.humidity }} %</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class='col-xl-6'>
+            <h3 class='text-center'>{{ year_ago_date | date:'d.m.Y' }}</h3>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Min temp</th>
+                    <th scope="col">Max temp</th>
+                    <th scope="col">The temp</th>
+                    <th scope="col">Humidity</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in year_ago_date_data.data %}
+                <tr>
+                    <td>{{ i.datetime|date:'d.m.Y H:i' }}</td>
+                    <td>{{ i.min_temp }} °C</td>
+                    <td>{{ i.max_temp }} °C</td>
+                    <td>{{ i.the_temp }} °C</td>
+                    <td>{{ i.humidity }} %</td>
+                </tr>
+                {% endfor %}
+                <tr style="font-weight:bold">
+                    <td> Average</td>
+                    <td>{{ year_ago_date_data.avg_data.min_temp }} °C</td>
+                    <td>{{ year_ago_date_data.avg_data.max_temp }} °C</td>
+                    <td>{{ year_ago_date_data.avg_data.the_temp }} °C</td>
+                    <td>{{ year_ago_date_data.avg_data.humidity }} %</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-xl-3'>
+        </div>
+        <div class='col-xl-6'>
+            <h3 class='text-center'> Average data comparison </h3>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <td></td>
+                    <td>{{ date | date:'d.m.Y' }}</td>
+                    <td>Difference</td>
+                    <td>{{ year_ago_date | date:'d.m.Y' }}</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Min temperature</td>
+                    <td>{{ req_date_data.avg_data.min_temp }} °C</td>
+                    {% if diffs.min_temp > 0 %}
+                    <td class="red">{{ diffs.min_temp }} °C warmer</td>
+                    {% elif diffs.min_temp == 0 %}
+                    <td class="green">The same temperature</td>
+                    {%elif diffs.min_temp < 0 %}
+                    <td class="blue">{{ diffs.min_temp|abs }} °C colder</td>
+                    {% endif %}
+                    <td>{{ year_ago_date_data.avg_data.min_temp }} °C</td>
+                </tr>
+                <tr>
+                    <td>Max temperature</td>
+                    <td>{{ req_date_data.avg_data.max_temp }} °C</td>
+                    {% if diffs.max_temp > 0 %}
+                    <td class="red">{{ diffs.max_temp }} °C warmer</td>
+                    {% elif diffs.max_temp == 0 %}
+                    <td class="green">The same temperature</td>
+                    {%elif diffs.max_temp < 0 %}
+                    <td class="blue">{{ diffs.max_temp|abs }} °C colder</td>
+                    {% endif %}
+                    <td>{{ year_ago_date_data.avg_data.max_temp }} °C</td>
+                </tr>
+                <tr>
+                    <td>The temperature</td>
+                    <td>{{ req_date_data.avg_data.the_temp }} °C</td>
+                    {% if diffs.the_temp > 0 %}
+                    <td class="red">{{ diffs.the_temp }} °C warmer</td>
+                    {% elif diffs.the_temp == 0 %}
+                    <td class="green">The same temperature</td>
+                    {%elif diffs.the_temp < 0 %}
+                    <td class="blue">{{ diffs.the_temp|abs }} °C colder</td>
+                    {% endif %}
+                    <td>{{ year_ago_date_data.avg_data.the_temp }} °C</td>
+                </tr>
+                <tr>
+                    <td>Humidity</td>
+                    <td>{{ req_date_data.avg_data.humidity }} %</td>
+                    {% if diffs.humidity > 0 %}
+                    <td class="red">{{ diffs.humidity }} % wetter</td>
+                    {% elif diffs.humidity == 0 %}
+                    <td class="green">The same humidity</td>
+                    {%elif diffs.humidity < 0 %}
+                    <td class="blue">{{ diffs.humidity|abs }} % drier</td>
+                    {% endif %}
+                    <td>{{ year_ago_date_data.avg_data.humidity }} %</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class='col-xl-3'>
+        </div>
+    </div>
+</div>
+{% endblock %}
