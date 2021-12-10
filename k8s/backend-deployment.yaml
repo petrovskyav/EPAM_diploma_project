@@ -22,6 +22,8 @@ spec:
           value: 'django-insecure-t)8$9v*ampc4h0$2r&ax_zr2b88emo6wm80d^%d_t7sgz5+f9+'
         - name: DJANGO_ALLOWED_HOSTS
           value: "*"
+        - name: DEBUG
+          value: "1"
         - name: DB_ENGINE
           value: "django.db.backends.mysql"
         - name: DB_NAME
