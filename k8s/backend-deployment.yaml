@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: petrovsky/backend
+        ports:
+        - containerPort: 8000
+        env:
+        - name: SECRET_KEY
+          value: 'django-insecure-t)8$9v*ampc4h0$2r&ax_zr2b88emo6wm80d^%d_t7sgz5+f9+'
+        - name: DJANGO_ALLOWED_HOSTS
+          value: "*"
+        - name: DB_ENGINE
+          value: "django.db.backends.mysql"
+        - name: DB_NAME
+          value: "weather_collector"
+        - name: DB_USER
+          value: "weather_coll"
+        - name: DB_PASSWORD
+          value: "weather_collector@123"
+        - name: DB_HOST
+          value: "192.168.88.24"
+        - name: DB_PORT
+          value: "3306"
