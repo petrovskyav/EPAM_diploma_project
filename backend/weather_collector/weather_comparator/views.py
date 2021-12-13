@@ -2,11 +2,13 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from weather_comparator.metaweather import Metaweather
 import datetime
+import socket
 
 def index(request):
     m = Metaweather()
     distinct_days = m.get_distinct_days()
-    return render(request, 'weather_comparator/index.html', {'title':'Data from DataBase', 'distinct_days':distinct_days})
+    server_ip = socket.gethostbyname(socket.gethostname())
+    return render(request, 'weather_comparator/index.html', {'title':'Data from DataBase', 'server_ip':server_ip, 'distinct_days':distinct_days})
 
 def weather(request, year, month, day):
     rquested_date = f'{year}-{month}-{day}'
@@ -33,7 +35,9 @@ def weather(request, year, month, day):
              'the_temp': round(req_date_data['avg_data']['the_temp'] - year_ago_date_data['avg_data']['the_temp'], 3),
              'humidity': round(req_date_data['avg_data']['humidity'] - year_ago_date_data['avg_data']['humidity'], 3),
              }
+    server_ip = socket.gethostbyname(socket.gethostname())
     return render(request, 'weather_comparator/weather.html', {'title': title,
+                                                               'server_ip':server_ip,
                                                                'date': dt_date.date(),
                                                                'year_ago_date':year_ago_dt_date.date(),
                                                                'req_date_data':req_date_data,
