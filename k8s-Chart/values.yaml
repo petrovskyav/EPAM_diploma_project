@@ -1,0 +1,19 @@
+application : weather_collector
+owner       : Alexander_Petrovsky
+project     : epam-graduation
+environment : Production
+
+
+
+
+
+
+backend:
+  port: 8000
+  container:
+    image: petrovsky/backend:latest
+
+frontend:
+  port: 80
+  container:
+    image: petrovsky/frontend:latest

@@ -1,0 +1,32 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-nginx-frontend
+  labels:
+    tier   : frontend
+    owner  : {{ .Values.owner }}
+    project: {{ .Values.project }}
+spec:
+  selector:
+    matchLabels:
+      project: {{ .Values.project }}-frontend
+  template:
+    metadata:
+      labels:
+        project: {{ .Values.project }}-frontend
+    spec:
+      containers:
+        - name : nginx-frontend
+          image: {{ .Values.frontend.container.image }}
+          ports:
+            - containerPort: {{ .Values.frontend.port }}
+          env:
+          - name  : BACKEND_SERVICE
+            value : {{ .Release.Name }}-backend-service
+          - name  : BACKEND_PORT
+            value : "{{ .Values.backend.port }}"
+          - name  : FRONTEND_PORT
+            value : "{{ .Values.frontend.port }}"
+
+
+
