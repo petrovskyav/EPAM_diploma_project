@@ -20,7 +20,7 @@ spec:
         - name : django-backend
           image: {{ .Values.backend.container.image }}
           ports:
-            - containerPort: 8000
+            - containerPort: {{ .Values.backend.port }}
           env:
           - name: SECRET_KEY
             value: 'django-insecure-t)8$9v*ampc4h0$2r&ax_zr2b88emo6wm80d^%d_t7sgz5+f9+'
@@ -28,15 +28,23 @@ spec:
             value: "*"
           - name: DEBUG
             value: "1"
+          - name: BACKEND_PORT
+            value: "{{ .Values.backend.port }}"
           - name: DB_ENGINE
-            value: "django.db.backends.mysql"
+            value: "{{ .Values.database.engine }}"
           - name: DB_NAME
-            value: "weather_collector"
+            value: "{{ .Values.database.name }}"
           - name: DB_USER
-            value: "weather_coll"
+            valueFrom:
+              secretKeyRef:
+                name: db-secrets
+                key: username
           - name: DB_PASSWORD
-            value: "weather_collector@123"
+            valueFrom:
+              secretKeyRef:
+                name: db-secrets
+                key: password
           - name: DB_HOST
-            value: "192.168.88.24"
+            value: "{{ .Values.database.host }}"
           - name: DB_PORT
-            value: "3306"
+            value: "{{ .Values.database.port }}"
