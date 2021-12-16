@@ -3,12 +3,14 @@ from django.shortcuts import render, redirect
 from weather_comparator.metaweather import Metaweather
 import datetime
 import socket
+import os
 
 def index(request):
     m = Metaweather()
     distinct_days = m.get_distinct_days()
     server_ip = socket.gethostbyname(socket.gethostname())
-    return render(request, 'weather_comparator/index.html', {'title':'Data from DataBase', 'server_ip':server_ip, 'distinct_days':distinct_days})
+    software_version = os.environ.get("SOFTWARE_VERSION", "unknown version")
+    return render(request, 'weather_comparator/index.html', {'title':'Data from DataBase', 'server_ip':server_ip, 'distinct_days':distinct_days, 'software_version':software_version})
 
 def weather(request, year, month, day):
     rquested_date = f'{year}-{month}-{day}'
