@@ -2,17 +2,16 @@ application : weather_collector
 owner       : Alexander_Petrovsky
 project     : epam-graduation
 environment : Production
-software_version : 0.0
 
 frontend:
   port: 80
   container:
-    image: petrovsky/frontend:{{ software_version }}
+    image: petrovsky/frontend:latest
 
 backend:
   port: 8000
   container:
-    image: petrovsky/backend:{{ software_version }}
+    image: petrovsky/backend:latest
 
 database:
   engine   : django.db.backends.mysql

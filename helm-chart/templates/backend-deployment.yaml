@@ -54,8 +54,6 @@ spec:
             value: "{{ .Values.database.host }}"
           - name: DB_PORT
             value: "{{ .Values.database.port }}"
-          - name: SOFTWARE_VERSION
-            value: "{{ .Values.software_version }}"
 
           livenessProbe:
             httpGet:
