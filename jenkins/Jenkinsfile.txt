@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    environment {
+      PROJECT_NAME = "Weather Collector"
+      OWNER_NAME   = "Alexander Petrovsky"
+      KUBECONFIG   ="/etc/kubernetes/admin.conf"
+    }
+
+    stages {
+
+        stage('1-Getting the code from git') {
+            steps {
+                git 'https://github.com/petrovskyav/EPAM_diploma_project.git'
+                sh "ls -lh"
+                script {
+                    //SOFTWARE_VERSION = sh (script: 'git tag --sort version:refname | tail -1', returnStdout: true).trim()
+                    SOFTWARE_VERSION = sh (script: 'git tag --points-at HEAD', returnStdout: true).trim()
+                    echo "Software version: ${SOFTWARE_VERSION}"
+                }
+            }
+        }
+
+        stage('2-Building docker images') {
+            steps {
+                script {
+                    frontend_image = docker.build("petrovsky/frontend:${SOFTWARE_VERSION}", "frontend/")
+                    sh "docker images"
+                    backend_image = docker.build("petrovsky/backend:${SOFTWARE_VERSION}", "backend/")
+                    sh "docker images"
+                }
+            }
+        }
+        stage('3-Pushing docker images to the repor') {
+            steps {
+                withDockerRegistry([ credentialsId: "docker-hub-credentials", url: "" ]) {
+                    script {
+                    frontend_image.push()
+                    backend_image.push()
+                    }
+                    //sh "docker push petrovsky/frontend"
+                    //sh "docker push petrovsky/backend"
+                }
+            }
+        }
+
+        stage('4-Deploying with helm') {
+            steps {
+                sh "helm upgrade --install app1 helm-chart/ --set backend.container.image=petrovsky/backend:${SOFTWARE_VERSION} --set frontend.container.image=petrovsky/frontend:${SOFTWARE_VERSION}"
+                sh "helm list"
+                sh "kubectl get svc"
+            }
+        }
+        
+    }
+}
